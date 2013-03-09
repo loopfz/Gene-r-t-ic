@@ -35,14 +35,15 @@ import shaft.gene_r_t_ic.geneticalgorithm.candidates.*;
 public class RealNumberCandidate extends ACandidate {
 
     private double[] _genotype;
-    private int _numVal;
-    private static CandidateEvaluator<RealNumberCandidate> _evaluator;
+    private static ICandidateEvaluator<RealNumberCandidate> _evaluator;
     private static ICrossoverOp _crossover = new RealNumberUniformCrossover(0.8);
     private static IMutationOp _mutation = new RealNumberMutation(0.01, 10);
+    private static int _randomMinBound = -1000000;
+    private static int _randomMaxBound = 1000000;
 
-    public RealNumberCandidate(int numVal) {
-        _numVal = numVal;
-        _genotype = new double[numVal];
+    public RealNumberCandidate(int length) {
+        super(length);
+        _genotype = new double[length];
     }
     
     public static void setUniformCrossover(double probability) {
@@ -53,7 +54,7 @@ public class RealNumberCandidate extends ACandidate {
         _mutation = new RealNumberMutation(probability, variancePercent);
     }
 
-    public static void setEvaluator(CandidateEvaluator<RealNumberCandidate> evaluator) {
+    public static void setEvaluator(ICandidateEvaluator<RealNumberCandidate> evaluator) {
         _evaluator = evaluator;
     }
     
@@ -72,7 +73,14 @@ public class RealNumberCandidate extends ACandidate {
 
     @Override
     public ICandidate newRandomCandidate() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        RealNumberCandidate newCand = new RealNumberCandidate(_length);
+        
+        for (int i = 0; i < _length; i++) {
+            newCand._genotype[i] = _randomMinBound
+                    + Math.random() * (_randomMaxBound - _randomMinBound);
+        }
+        
+        return newCand;
     }
 
     @Override
@@ -95,7 +103,7 @@ public class RealNumberCandidate extends ACandidate {
 
         @Override
         public ICandidate apply(ICandidate cand1, ICandidate cand2) {
-            if (!(cand1 instanceof RealNumberCandidate)
+           if (!(cand1 instanceof RealNumberCandidate)
                     || !(cand2 instanceof RealNumberCandidate)) {
                 throw new UnsupportedOperationException("Operator cannot operate on these ICandidates' real types.");
             }
@@ -111,10 +119,10 @@ public class RealNumberCandidate extends ACandidate {
             real1 = (RealNumberCandidate) cand1;
             real2 = (RealNumberCandidate) cand2;
 
-            int numVals = real1._numVal;
-            RealNumberCandidate child = new RealNumberCandidate(numVals);
+            int length = real1._length;
+            RealNumberCandidate child = new RealNumberCandidate(length);
 
-            for (int i = 0; i < numVals; i++) {
+            for (int i = 0; i < length; i++) {
                 double val;
                 if (Math.random() < 0.5) {
                     val = real1._genotype[i];
@@ -145,7 +153,7 @@ public class RealNumberCandidate extends ACandidate {
 
             RealNumberCandidate realCand = (RealNumberCandidate) candidate;
 
-            for (int i = 0; i < realCand._numVal; i++) {
+            for (int i = 0; i < realCand._length; i++) {
                 if (Math.random() <= _proba) {
 
                     double coef = Math.random() - Math.random();

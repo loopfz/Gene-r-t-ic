@@ -27,7 +27,7 @@ package shaft.gene_r_t_ic.geneticalgorithm.candidates;
  *
  * @author Thomas Schaffer <thomas.schaffer@epitech.eu>
  */
-public interface CandidateEvaluator<T> {
+public interface ICandidateEvaluator<T> {
     
     public double evaluate(T candidate);
     

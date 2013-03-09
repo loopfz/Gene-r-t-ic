@@ -35,13 +35,12 @@ import shaft.gene_r_t_ic.geneticalgorithm.candidates.*;
 public class BinaryCandidate extends ACandidate {
 
     private byte[] _genotype;
-    private int _length;
-    private static CandidateEvaluator<BinaryCandidate> _evaluator;
+    private static ICandidateEvaluator<BinaryCandidate> _evaluator;
     private static ICrossoverOp _crossover = new BinaryUniformCrossover(0.8);
     private static IMutationOp _mutation = new BinaryMutation(0.01);
 
     public BinaryCandidate(int length) {
-        _length = length;
+        super(length);
         _genotype = new byte[length];
     }
     
@@ -53,7 +52,7 @@ public class BinaryCandidate extends ACandidate {
         _mutation = new BinaryMutation(probability);
     }
 
-    public static void setEvaluator(CandidateEvaluator<BinaryCandidate> evaluator) {
+    public static void setEvaluator(ICandidateEvaluator<BinaryCandidate> evaluator) {
         _evaluator = evaluator;
     }
     
@@ -72,7 +71,13 @@ public class BinaryCandidate extends ACandidate {
 
     @Override
     public ICandidate newRandomCandidate() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        BinaryCandidate newCand = new BinaryCandidate(_length);
+        
+        for (int i = 0; i < _length; i++) {
+            newCand._genotype[i] = (byte)(Math.random() < 0.5 ? 1 : 0);
+        }
+        
+        return newCand;
     }
 
     @Override
@@ -138,7 +143,7 @@ public class BinaryCandidate extends ACandidate {
         @Override
         public ICandidate apply(ICandidate candidate) {
             if (!(candidate instanceof BinaryCandidate)) {
-                throw new UnsupportedOperationException("Not supported yet.");
+                throw new UnsupportedOperationException("Operator cannot operate on this ICandidate's real type.");
             }
 
             BinaryCandidate binCand = (BinaryCandidate) candidate;

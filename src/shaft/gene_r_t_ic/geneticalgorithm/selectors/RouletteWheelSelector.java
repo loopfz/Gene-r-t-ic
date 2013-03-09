@@ -62,6 +62,6 @@ public class RouletteWheelSelector extends ASelector {
                 return cand;
             }
         }
-        return null;
+        return _pop.get(_pop.size() - 1);
     }
 }
