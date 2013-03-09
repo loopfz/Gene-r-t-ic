@@ -31,7 +31,7 @@ import shaft.gene_r_t_ic.geneticalgorithm.ICandidate;
  *
  * @author Thomas Schaffer <thomas.schaffer@epitech.eu>
  */
-public class RouletteWheelSelector extends ASelector {
+public abstract class RouletteWheelSelector extends ASelector {
 
     @Override
     public void loadPopulation(List<ICandidate> population) {
@@ -39,17 +39,8 @@ public class RouletteWheelSelector extends ASelector {
         Collections.sort(_pop);
         normalizeFitness();
     }
-
-    protected void normalizeFitness() {
-        double totalFitness = 0;
-        
-        for (ICandidate cand : _pop) {
-            totalFitness += cand.getFitness();
-        }
-        for (ICandidate cand : _pop) {
-            cand.setFitness(cand.getFitness() / totalFitness);
-        }
-    }
+    
+    abstract void normalizeFitness();
     
     @Override
     public ICandidate select() {
@@ -57,7 +48,7 @@ public class RouletteWheelSelector extends ASelector {
         double accu = 0;
         
         for (ICandidate cand : _pop) {
-            accu += cand.getFitness();
+            accu += cand.getCandidateError();
             if (accu >= roll) {
                 return cand;
             }

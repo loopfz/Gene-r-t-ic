@@ -69,7 +69,7 @@ public class GeneticAlgorithm {
         
         ICandidate ret = null;
         for (ICandidate cand : _pop) {
-            if (ret == null || cand.getFitness() > ret.getFitness()) {
+            if (ret == null || cand.getCandidateError() < ret.getCandidateError()) {
                 ret = cand;
             }
         }

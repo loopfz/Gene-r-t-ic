@@ -31,7 +31,7 @@ import shaft.gene_r_t_ic.geneticalgorithm.ICandidate;
  */
 public abstract class ACandidate implements ICandidate {
     
-    protected double _fitness;
+    protected double _error;
     protected int _length;
     
     protected ACandidate(int length) {
@@ -43,21 +43,21 @@ public abstract class ACandidate implements ICandidate {
     }
     
     @Override
-    public void setFitness(double fitness) {
-        _fitness = fitness;
+    public void setCandidateError(double error) {
+        _error = error;
     }
     
     @Override
-    public double getFitness() {
-        return _fitness;
+    public double getCandidateError() {
+        return _error;
     }
 
     @Override
     public int compareTo(ICandidate o) {
-        if (getFitness() > o.getFitness()) {
-            return -1;
-        } else if (o.getFitness() > getFitness()) {
+        if (getCandidateError() > o.getCandidateError()) {
             return 1;
+        } else if (o.getCandidateError() > getCandidateError()) {
+            return -1;
         }
         return 0;
     }

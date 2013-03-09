@@ -66,7 +66,7 @@ public class BinaryCandidate extends ACandidate {
             throw new UnsupportedOperationException("No evaluator set.");
         }
 
-        _fitness = _evaluator.evaluate(this);
+        _error = _evaluator.evaluate(this);
     }
 
     @Override

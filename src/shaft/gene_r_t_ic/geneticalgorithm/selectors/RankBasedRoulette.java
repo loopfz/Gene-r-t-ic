@@ -41,7 +41,7 @@ public class RankBasedRoulette extends RouletteWheelSelector {
         }
         i = 0;
         for (ICandidate cand : _pop) {
-            cand.setFitness( ((double) (_pop.size() - i++ - 1)) / totalFitness);
+            cand.setCandidateError( ((double) (_pop.size() - i++ - 1)) / totalFitness);
         }
     }
 }
