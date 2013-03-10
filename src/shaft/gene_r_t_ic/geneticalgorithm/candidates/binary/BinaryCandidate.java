@@ -34,16 +34,17 @@ import shaft.gene_r_t_ic.geneticalgorithm.candidates.*;
  */
 public class BinaryCandidate extends ACandidate {
 
-    private byte[] _genotype;
+    protected byte[] _genotype;
     private static ICandidateEvaluator<BinaryCandidate> _evaluator;
     private static ICrossoverOp _crossover = new BinaryUniformCrossover(0.8);
     private static IMutationOp _mutation = new BinaryMutation(0.01);
+    private int _bitIter;
 
     public BinaryCandidate(int length) {
         super(length);
         _genotype = new byte[length];
     }
-    
+
     public static void setUniformCrossover(double probability) {
         _crossover = new BinaryUniformCrossover(probability);
     }
@@ -59,7 +60,7 @@ public class BinaryCandidate extends ACandidate {
     public byte getValue(int i) {
         return _genotype[i];
     }
-
+    
     @Override
     public void evaluate() {
         if (_evaluator == null) {
@@ -72,12 +73,32 @@ public class BinaryCandidate extends ACandidate {
     @Override
     public ICandidate newRandomCandidate() {
         BinaryCandidate newCand = new BinaryCandidate(_length);
-        
+
         for (int i = 0; i < _length; i++) {
-            newCand._genotype[i] = (byte)(Math.random() < 0.5 ? 1 : 0);
+            newCand._genotype[i] = (byte) (Math.random() < 0.5 ? 1 : 0);
         }
-        
+
         return newCand;
+    }
+
+    public BinaryCandidate newAsInt(int length) {
+        return new BinaryCandidate(length * 32);
+    }
+    
+    public int getLengthAsInt() {
+        return getLength() / 32;
+    }
+
+    public int getNextInt() {
+        int newInt = 0;
+        for (int i = 0; i < 32; i++) {
+            newInt |= (_genotype[i + _bitIter] << i);
+        }
+        _bitIter += 32;
+        if (_bitIter + 32 >= _length) {
+            _bitIter = 0;
+        }
+        return newInt;
     }
 
     @Override
