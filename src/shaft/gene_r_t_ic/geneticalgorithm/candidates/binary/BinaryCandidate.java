@@ -34,7 +34,7 @@ import shaft.gene_r_t_ic.geneticalgorithm.candidates.*;
  */
 public class BinaryCandidate extends ACandidate {
 
-    protected byte[] _genotype;
+    private byte[] _genotype;
     private static ICandidateEvaluator<BinaryCandidate> _evaluator;
     private static ICrossoverOp _crossover = new BinaryUniformCrossover(0.8);
     private static IMutationOp _mutation = new BinaryMutation(0.01);
