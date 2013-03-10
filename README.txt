@@ -34,9 +34,3 @@ and a suitable fitness evaluation function is the responsability of the user.
 Example implementations of generic candidates (binary form,
 real numbers set, ...) are included, in which case they only need a fitness
 evaluation function.
-
---------------------------------------------------------------------------------
-| Versions                                                                     |
---------------------------------------------------------------------------------
-
-2013-03-06	Version 0.1
