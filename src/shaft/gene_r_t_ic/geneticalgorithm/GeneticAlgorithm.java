@@ -36,6 +36,10 @@ public class GeneticAlgorithm {
     private ISelector _selector;
     private int _generationCounter;
     private boolean _popEval;
+    private IGenerationData _data;
+    private double _meanError;
+    private ICandidate _best;
+    private ICandidate _worst;
     
     public GeneticAlgorithm(ISelector selector, IPopulationGenerator generator,
             ICandidate firstInstance) {
@@ -43,6 +47,7 @@ public class GeneticAlgorithm {
         _generator = generator;
         _pop = _generator.initialPopulation(firstInstance);
         _generationCounter = 0;
+        _data = new GAGenerationData();
     }
     
     public void evaluatePopulation() {
@@ -55,24 +60,58 @@ public class GeneticAlgorithm {
         _popEval = true;
     }
     
-    public int generation() {
+    public void generation() {
         evaluatePopulation();
         _selector.loadPopulation(_pop);
         _pop = _generator.newPopulation(_selector);
         _selector.unloadPopulation();
         _popEval = false;
-        return ++_generationCounter;
+        _generationCounter++;
     }
     
-    public ICandidate getBestCandidate() {
+    public IGenerationData generationData() {
+        double totalError = 0;
+        _best = null;
+        _worst = null;
+        
         evaluatePopulation();
         
-        ICandidate ret = null;
         for (ICandidate cand : _pop) {
-            if (ret == null || cand.getCandidateError() < ret.getCandidateError()) {
-                ret = cand;
+            if (_best == null ||  cand.getCandidateError() < _best.getCandidateError()) {
+                _best = cand;
             }
+            if (_worst == null || cand.getCandidateError() > _worst.getCandidateError()) {
+                _worst = cand;
+            }
+            totalError += cand.getCandidateError();
         }
-        return ret;
+        
+        _meanError = totalError / _pop.size();
+        
+        return _data;
+    }
+    
+    private class GAGenerationData implements IGenerationData {
+
+        @Override
+        public int generation() {
+            return _generationCounter;
+        }
+
+        @Override
+        public ICandidate worstCandidate() {
+            return _worst;
+        }
+
+        @Override
+        public double meanError() {
+            return _meanError;
+        }
+
+        @Override
+        public ICandidate bestCandidate() {
+            return _best;
+        }
+        
     }
 }

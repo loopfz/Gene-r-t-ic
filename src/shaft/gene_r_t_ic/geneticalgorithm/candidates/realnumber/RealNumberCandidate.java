@@ -38,12 +38,20 @@ public class RealNumberCandidate extends ACandidate {
     private static ICandidateEvaluator<RealNumberCandidate> _evaluator;
     private static ICrossoverOp _crossover = new RealNumberUniformCrossover(0.8);
     private static IMutationOp _mutation = new RealNumberMutation(0.01, 10);
-    private static int _randomMinBound = -1000000;
-    private static int _randomMaxBound = 1000000;
+    private static double _randomMinBound = -1000000.0;
+    private static double _randomMaxBound = 1000000.0;
 
     public RealNumberCandidate(int length) {
         super(length);
         _genotype = new double[length];
+    }
+    
+    public RealNumberCandidate(RealNumberCandidate other) {
+        super(other._length);
+        _genotype = new double[other._length];
+        for (int i = 0; i < _length; i++) {
+            _genotype[i] = other._genotype[i];
+        }
     }
     
     public static void setUniformCrossover(double probability) {
@@ -56,6 +64,11 @@ public class RealNumberCandidate extends ACandidate {
 
     public static void setEvaluator(ICandidateEvaluator<RealNumberCandidate> evaluator) {
         _evaluator = evaluator;
+    }
+    
+    public static void setRandomBoundaries(double min, double max) {
+        _randomMinBound = min;
+        _randomMaxBound = max;
     }
     
     public double getValue(int i) {
@@ -108,17 +121,17 @@ public class RealNumberCandidate extends ACandidate {
                 throw new UnsupportedOperationException("Operator cannot operate on these ICandidates' real types.");
             }
             
-            if (Math.random() > _proba) {
-                if (Math.random() < 0.5) {
-                    return cand1;
-                }
-                return cand2;
-            }
-
             RealNumberCandidate real1, real2;
             real1 = (RealNumberCandidate) cand1;
             real2 = (RealNumberCandidate) cand2;
-
+            
+            if (Math.random() > _proba) {
+                if (Math.random() < 0.5) {
+                    return new RealNumberCandidate(real1);
+                }
+                return new RealNumberCandidate(real2);
+            }
+            
             int length = real1._length;
             RealNumberCandidate child = new RealNumberCandidate(length);
 
@@ -156,9 +169,10 @@ public class RealNumberCandidate extends ACandidate {
             for (int i = 0; i < realCand._length; i++) {
                 if (Math.random() <= _proba) {
 
-                    double coef = Math.random() - Math.random();
-
-                    realCand._genotype[i] += (realCand._genotype[i] / _variance) * coef;
+                    /*double coef = Math.random() - Math.random();
+                    realCand._genotype[i] += (realCand._genotype[i] / _variance) * coef;*/
+                    
+                    realCand._genotype[i] += (_randomMinBound + Math.random() * (_randomMaxBound - _randomMinBound));
                 }
             }
             return realCand;
