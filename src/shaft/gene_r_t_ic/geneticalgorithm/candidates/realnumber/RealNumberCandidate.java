@@ -49,9 +49,7 @@ public class RealNumberCandidate extends ACandidate {
     public RealNumberCandidate(RealNumberCandidate other) {
         super(other._length);
         _genotype = new double[other._length];
-        for (int i = 0; i < _length; i++) {
-            _genotype[i] = other._genotype[i];
-        }
+        System.arraycopy(other._genotype, 0, _genotype, 0, _length);
     }
     
     public static void setUniformCrossover(double probability) {
@@ -168,11 +166,11 @@ public class RealNumberCandidate extends ACandidate {
 
             for (int i = 0; i < realCand._length; i++) {
                 if (Math.random() <= _proba) {
-
-                    /*double coef = Math.random() - Math.random();
-                    realCand._genotype[i] += (realCand._genotype[i] / _variance) * coef;*/
-                    
-                    realCand._genotype[i] += (_randomMinBound + Math.random() * (_randomMaxBound - _randomMinBound));
+                    double coef = Math.random();
+                    if (Math.random() < 0.5) {
+                        coef = -coef;
+                    }
+                    realCand._genotype[i] += (realCand._genotype[i] / _variance) * coef;
                 }
             }
             return realCand;
