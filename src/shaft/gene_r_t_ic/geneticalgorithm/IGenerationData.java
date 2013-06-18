@@ -33,6 +33,6 @@ public interface IGenerationData {
     public int generation();
     
     public ICandidate worstCandidate();
-    public double meanError();
+    public double meanFitness();
     public ICandidate bestCandidate();
 }

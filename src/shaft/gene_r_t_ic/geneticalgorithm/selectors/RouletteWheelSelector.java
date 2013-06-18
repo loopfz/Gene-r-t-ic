@@ -48,7 +48,7 @@ public abstract class RouletteWheelSelector extends ASelector {
         double accu = 0;
         
         for (ICandidate cand : _pop) {
-            accu += cand.getCandidateError();
+            accu += cand.getFitness();
             if (accu >= roll) {
                 return cand;
             }

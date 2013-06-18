@@ -37,7 +37,7 @@ public class GeneticAlgorithm {
     private int _generationCounter;
     private boolean _popEval;
     private IGenerationData _data;
-    private double _meanError;
+    private double _meanFitness;
     private ICandidate _best;
     private ICandidate _worst;
     
@@ -70,23 +70,23 @@ public class GeneticAlgorithm {
     }
     
     public IGenerationData generationData() {
-        double totalError = 0;
+        double totalFitness = 0;
         _best = null;
         _worst = null;
         
         evaluatePopulation();
         
         for (ICandidate cand : _pop) {
-            if (_best == null ||  cand.getCandidateError() < _best.getCandidateError()) {
+            if (_best == null ||  cand.compareTo(_best) > 0) {
                 _best = cand;
             }
-            if (_worst == null || cand.getCandidateError() > _worst.getCandidateError()) {
+            if (_worst == null || cand.compareTo(_worst) < 0) {
                 _worst = cand;
             }
-            totalError += cand.getCandidateError();
+            totalFitness += cand.getFitness();
         }
         
-        _meanError = totalError / _pop.size();
+        _meanFitness = totalFitness / _pop.size();
         
         return _data;
     }
@@ -104,8 +104,8 @@ public class GeneticAlgorithm {
         }
 
         @Override
-        public double meanError() {
-            return _meanError;
+        public double meanFitness() {
+            return _meanFitness;
         }
 
         @Override

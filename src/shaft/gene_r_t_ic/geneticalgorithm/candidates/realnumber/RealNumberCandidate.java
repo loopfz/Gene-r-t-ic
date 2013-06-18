@@ -79,7 +79,7 @@ public class RealNumberCandidate extends ACandidate {
             throw new UnsupportedOperationException("No evaluator set.");
         }
 
-        _error = _evaluator.evaluate(this);
+        _fitness = _evaluator.evaluate(this);
     }
 
     @Override

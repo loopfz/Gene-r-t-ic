@@ -31,8 +31,8 @@ public interface ICandidate extends Comparable<ICandidate> {
     
     public void evaluate();
     
-    public void setCandidateError(double error);
-    public double getCandidateError();
+    public void setFitness(double fitness);
+    public double getFitness();
     
     ICandidate newRandomCandidate();
     
